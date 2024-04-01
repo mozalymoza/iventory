@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Produk</title>
+    <!-- Bootstrap CSS link -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <form action="/produk/update/<%= id %>" method="POST" enctype="multipart/form-data"> 
+            <div class="mb-3">
+                <img src="/images/upload/<%= foto_produk %>" height="100">
+                <label for="nama" class="form-label">Foto Produk</label>
+                <input type="file" class="form-control" name="foto_produk" required>
+            </div>
+            <div class="mb-3">
+                <label for="nama" class="form-label">Nama Produk</label>
+                <input type="text" class="form-control" name="nama_produk" value="<%= nama_produk %>" required>
+            </div>
+            <div class="mb-3">
+                <label for="nama" class="form-label">Harga Produk</label>
+                <input type="text" class="form-control" name="harga_produk" value="<%= harga_produk %>"  required>
+            </div>
+            <div class="mb-3">
+                <label for="nama" class="form-label">Kategori</label>
+                <select name="id_kategori" class="form-control">
+                    <% for(var i = 0; i< data.length; i++) {%>
+                    <option value="<%= data[i].id_kategori %>"><%= data[i].nama_kategori %></option> 
+                    <% } %> 
+                </select>
+            </div>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-sm btn-success">Simpan</button>
+            </div>
+        </form>
+    </div>
+</body>
+
+ <!-- Bootstrap JS link (optional, if needed) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

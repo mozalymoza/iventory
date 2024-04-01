@@ -1,0 +1,33 @@
+
+<%- include('../partials/__navbar.ejs') %>
+<body>
+    <%- include('../partials/__head.ejs') %>
+    <div class="container">
+        <% if (messages.success) { %>
+            <div class="alert alert-info" role="alert">
+                <%- messages.success %>
+            </div>
+            <% } %>
+        <h2 class="text-center"> Register User</h2>
+        <form action="/saveusers" method="POST">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="text" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="text" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-sm btn-success">Simpan</button>
+            </div>
+        </form>
+    </div>
+</div>
+<footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+            <span>Copyright &copy; Khanza Website 2023</span>
+        </div>
+
+<%- include('../partials/__foot.ejs') %>

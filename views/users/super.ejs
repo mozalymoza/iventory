@@ -1,0 +1,20 @@
+<%- include('../partials/__navbar.ejs') %>
+<body>
+    <%- include('../partials/__head.ejs') %>
+  <div class="container">
+    <% if (messages.success) { %>
+    <div class="alert alert-info" role="alert"><%- messages.success %></div>
+    <% } %>
+    <h2 class="text-center mt-3 text-dark">Selamat datang di Website Perkapalan</h2>
+    <div class="row text-center">
+      <div class="col">
+        <h1 >Hello : <%= email %></h1>
+        <a href="/logout">Logout </a>
+      </div>
+    </div>
+  </div>
+  
+</body>
+
+
+<%- include('../partials/__foot.ejs') %>
