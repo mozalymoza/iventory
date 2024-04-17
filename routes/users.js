@@ -6,6 +6,7 @@ var router = express.Router();
 router.get('/', async function (req, res, next) {
   try {
     let id = req.session.userId;
+
     let Data = await Model_Users.getId(id);
     if (Data.length > 0) {
       //tambahkan kondisi pengecekan level
@@ -14,6 +15,8 @@ router.get('/', async function (req, res, next) {
       } else {
         res.render('users/index', {
           title: 'Users Home',
+          nama: Data[0].nama,
+          level: Data[0].level,
           email: Data[0].email
         });
       }

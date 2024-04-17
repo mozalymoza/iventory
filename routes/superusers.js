@@ -12,6 +12,8 @@ router.get('/', async function (req, res, next) {
             } else {
                 res.render('users/super', {
                     title: 'Users Home',
+                    nama: Data[0].nama,
+                    level: req.session.level,
                     email: Data[0].email
                 });
             }

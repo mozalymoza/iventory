@@ -13,6 +13,8 @@ var superusersRouter = require('./routes/superusers');
 
 var kategoriRouter = require('./routes/kategori');
 var produkRouter = require('./routes/produk');
+var pengeluaranRouter = require('./routes/pengeluaran');
+var penerimaanRouter = require('./routes/penerimaan');
 
 var app = express();
 
@@ -47,6 +49,8 @@ app.use('/users', usersRouter);
 app.use('/superusers', superusersRouter);
 app.use('/kategori', kategoriRouter)
 app.use('/produk', produkRouter)
+app.use('/pengeluaran', pengeluaranRouter)
+app.use('/penerimaan', penerimaanRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

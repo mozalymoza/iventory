@@ -1,0 +1,53 @@
+<%- include('../partials/__head.ejs') %>
+<body>
+    <%- include('../partials/__navbar.ejs') %>
+    <div class="container">
+        <% if (messages.success) { %>
+            <div class="alert alert-info" role="alert">
+                <%- messages.success %>
+            </div>
+        <% } %>
+        <h1 class="text-center mt-4 ">Data Penerimaan Pangan</h1>
+        <div class="row">
+            <div class="col">
+                <a href="/penerimaan/create" class="btn btn-sm btn-success">Tambah</a>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Tanggal Penerimaan</th>
+                            <th scope="col">Jumlah Pangan Diterima</th>
+                            <th scope="col">Nama Produk</th>
+                            <th scope="col">Nama Kategori</th>
+                            <th colspan="2" scope="col">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(var i = 0; i < data.length; i++){ %>
+                            <tr>
+                                <th scope="row"><%= (i+1) %></th>
+                                <td>
+                                    <%= data[i].tanggal_penerimaan %>
+                                </td>
+                                <td>
+                                    <%= data[i].jumlah_diterima %>
+                                </td>
+                                <td>
+                                    <%= data[i].nama_produk %>
+                                </td>
+                                <td>
+                                    <%= data[i].nama_kategori %>
+                                </td>
+                                <td>
+                                    <a href="/penerimaan/edit/<%= data[i].id_penerimaan %>" class="btn btn-sm btn-warning">Edit</a>
+                                    <a href="/penerimaan/delete/<%= data[i].id_penerimaan %>" class="btn btn-sm btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../partials/__foot.ejs') %>

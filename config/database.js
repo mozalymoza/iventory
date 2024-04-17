@@ -3,7 +3,7 @@ let connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'database_pemrograman_framework',
+    database: 'db_iventory_pangan',
 });
 connection.connect(function(error){
     if(!!error){

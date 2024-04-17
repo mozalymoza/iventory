@@ -2,21 +2,49 @@ var express = require('express');
 var router = express.Router();
 var connection = require('../config/database.js');
 const Model_Kategori = require('../model/Model_Kategori.js');
+const Model_Users = require('../model/Model_Users.js');
 
 router.get('/', async function (req, res, next) {
-    let rows = await Model_Kategori.getAll();
-    res.render('kategori/index', {
-        data: rows
-    })
-})
+    try {
+        let id = req.session.userId;
+        let Data = await Model_Users.getId(id);
+        let rows = await Model_Kategori.getAll();
+        let level_users = req.session.level;
+        if (Data.length > 0) {
+        res.render('kategori/index', {
+            level: req.session.level,
+            data: rows,
+            level: level_users
+        });
+        }
+    } catch (err) {
+        req.flash('invalid', 'Anda harus login terlebih dahulu');
+        res.redirect('/login')
+        console.log(err)
+    }
+    });
+    
 
-
-
-router.get('/create', function (req, res, next) {
-    res.render('kategori/create', {
-        nama_kategori: ''
-    })
-})
+    router.get('/create', async function (req, res, next) {
+        try {
+            let level_users = req.session.level;
+            let id = req.session.userId;
+            let Data = await Model_Users.getId(id);
+            if(Data[0].level_users == "1") {
+            res.render('kategori/create', {
+                nama_kategori: '',
+                level: level_users
+            })
+            }
+            else if (Data[0].level_users == "2"){
+                req.flash('failure', 'Anda bukan bagian admin');
+                res.redirect('/kategori')
+            }
+        } catch (Data) {
+            req.flash('invalid', 'Anda harus login terlebih dahulu');
+            res.redirect('/login')
+        }
+        })
 
 
 router.post('/store', async function (req, res, next) {
@@ -26,7 +54,7 @@ router.post('/store', async function (req, res, next) {
             nama_kategori
         }
             await Model_Kategori.Store(Data);
-            req.flash('success', 'Berhasil menyimpan data!');
+            req.flash('success', 'Berhasil menyimpan data baru!');
             res.redirect('/kategori');
         } catch {
         req.flash('error', 'Terjadi kesalahan pada fungsi')
@@ -36,13 +64,29 @@ router.post('/store', async function (req, res, next) {
 
 
 router.get('/edit/(:id)', async function (req, res, next) {
-    let id = req.params.id;
-    let rows = await Model_Kategori.getId(id);
-            res.render('kategori/edit', {
-                id: rows[0].id_kategori,
-                nama_kategori: rows[0].nama_kategori
-            })
+    try{
+        let level_users = req.session.level;
+        let id_users = req.session.userId;
+        let id = req.params.id;
+        let rows = await Model_Kategori.getId(id);
+        let Data = await Model_Users.getId(id_users);
+        if(Data[0].level_users == "1") {
+        res.render('kategori/edit', {
+            id: rows[0].id_kategori,
+            nama_kategori: rows[0].nama_kategori,
+            level: level_users
         })
+        }
+        else if (Data[0].level_users == "2"){
+            req.flash('failure', 'Anda bukan admin');
+            res.redirect('/kategori')
+        }
+    } catch(Data) {
+        req.flash('invalid', 'Anda harus login');
+        res.redirect('/login')
+    }
+    })
+    
 
 router.post('/update/(:id)', async function (req, res, next) {
     try {
@@ -62,11 +106,24 @@ router.post('/update/(:id)', async function (req, res, next) {
 
 
 router.get('/delete/(:id)', async function (req, res) {
-    let id = req.params.id;
-    await Model_Kategori.Delete(id);
-        req.flash('success', 'Data terhapus!');
-        res.redirect('/kategori');
+    try{
+        let id = req.params.id;
+        let id_users = req.session.userId;
+        let Data = await Model_Users.getId(id_users);
+        if(Data[0].level_users == 1){
+            await Model_Kategori.Delete(id);
+            req.flash('success', 'Berhasil menghapus data');
+            res.redirect('/kategori')
+        }
+        else if (Data[0].level_users == 2) {
+            req.flash('failure', 'Anda bukan admin');
+            res.redirect('/kategori')
+        }
+    }catch{
+        req.flash('invalid', 'Anda harus login');
+        res.redirect('/login')
+    }
     })
-
+    
 
 module.exports = router;

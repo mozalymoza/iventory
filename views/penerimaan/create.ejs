@@ -1,0 +1,43 @@
+
+<%- include('../partials/__head.ejs') %>
+<body>
+    
+  <%- include('../partials/__navbar.ejs') %>
+    <div class="container">
+        <div class="card mt-5 bg-primary">
+            <div class="card-body">
+                <h1 class="card-title text-center text-danger mb-5">tambah Data Penerimaan</h1>
+                <form action="/penerimaan/store" method="POST">
+                    <div class="mb-3 text-light">
+                        <label for="tanggal_penerimaan" class="form-label">Tanggal Penerimaan</label>
+                        <input type="date" class="form-control" name="tanggal_penerimaan" required>
+                    </div>
+                    <div class="mb-3 text-light">
+                        <label for="jumlah_diterima" class="form-label">Jumlah Diterima</label>
+                        <input type="number" class="form-control" name="jumlah_diterima" required>
+                    </div>
+                    <div class="mb-3 text-light">
+                        <label for="id_produk" class="form-label">Nama Produk</label>
+                        <select class="form-select" aria-label="Pilih Produk" name="id_produk" required>
+                            <option selected>Pilih Produk</option>
+                            <% for(var i=0; i < data_produk.length; i++){ %>
+                            <option value="<%= data_produk[i].id_produk %>"><%= data_produk[i].nama_produk %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_kategori" class="form-label">Kategori</label>
+                        <select name="id_kategori" id="id_kategori" class="form-control">
+                            <% for(var i = 0; i< data_kategori.length; i++) {%>
+                            <option value="<%= data_kategori[i].id_kategori %>"><%= data_kategori[i].nama_kategori %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div class="mb-3 text-center">
+                        <button type="submit" class="btn btn-sm btn-success">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>

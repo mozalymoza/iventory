@@ -1,14 +1,16 @@
 
+<%- include('../partials/__head.ejs') %>
 <%- include('../partials/__navbar.ejs') %>
+
+<%- include('../partials/__foot.ejs') %>
 <body>
-    <%- include('../partials/__head.ejs') %>
     <div class="container">
         <% if (messages.success) { %>
             <div class="alert alert-info" role="alert">
                 <%- messages.success %>
             </div>
             <% } %>
-        <h2 class="text-center"> Register User</h2>
+        <h2 class="text-center"> Register </h2>
         <form action="/saveusers" method="POST">
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
@@ -24,10 +26,3 @@
         </form>
     </div>
 </div>
-<footer class="sticky-footer bg-white">
-    <div class="container my-auto">
-        <div class="copyright text-center my-auto">
-            <span>Copyright &copy; Khanza Website 2023</span>
-        </div>
-
-<%- include('../partials/__foot.ejs') %>

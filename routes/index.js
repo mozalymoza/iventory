@@ -21,6 +21,7 @@ router.get('/login', function (req, res, next) {
 
 router.post('/saveusers', async (req, res) => {
   let {
+    nama,
     email,
     password
   } = req.body;
@@ -43,6 +44,7 @@ router.post('/log', async (req, res) => {
       let cek = await bcrypt.compare(password, enkripsi);
       if (cek) {
         req.session.userId = Data[0].id_users;
+        req.session.level = Data[0].level_users;
         //tambahkan kondisi pengecekan level pada user yang login
         if (Data[0].level_users == 1) {
           req.flash('success', 'Berhasil login');

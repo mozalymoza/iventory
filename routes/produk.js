@@ -26,6 +26,7 @@ router.get('/', async function (req, res, next) {
         if (Data.length > 0) {
             let rows = await Model_Produk.getAll();
             res.render('produk/index', {
+                level: req.session.level,
                 data: rows
             })
         } else {
@@ -38,15 +39,32 @@ router.get('/', async function (req, res, next) {
 
 
 router.get('/create', async function (req, res, next) {
-    let rows = await Model_Kategori.getAll();
-    res.render('produk/create', {
-        data: rows
+    try {
+        let level_users = req.session.level;
+        let id = req.session.userId;
+        let Data = await Model_Users.getId(id);
+        let rows = await Model_Kategori.getAll(id);
+        if(Data[0].level_users == "1") {
+        res.render('produk/create', {
+            data: rows,
+            level: level_users
+        })
+        }
+        else if (Data[0].level_users == "2"){
+            req.flash('failure', 'Anda bukan admin');
+            res.redirect('/produk')
+        }
+    } catch (Data) {
+        req.flash('invalid', 'Anda harus login');
+        console.log(Data);
+        res.redirect('/login');
+    }
     })
-})
 
 
 router.post('/store', upload.single("foto_produk"), async function (req, res, next) {
     try {
+        
         let { nama_produk, harga_produk, id_kategori} = req.body;
         let Data = {
             nama_produk,
@@ -55,7 +73,7 @@ router.post('/store', upload.single("foto_produk"), async function (req, res, ne
             foto_produk: req.file.filename
         }
          Model_Produk.Store(Data);
-        req.flash('success', 'Berhasil menyimpan data!');
+        req.flash('success', 'Berhasil menambah data produk!');
         res.redirect('/produk');
     } catch {
         req.flash('error', 'Terjadi kesalahan pada fungsi')
@@ -65,22 +83,37 @@ router.post('/store', upload.single("foto_produk"), async function (req, res, ne
 
 
 router.get('/edit/(:id)', async function (req, res, next) {
-    let id = req.params.id;
+    try{
+        let level_users = req.session.level;
+        let id = req.params.id;
+        let id_users = req.session.userId;
+        let rows = await Model_Produk.getId(id);
+        let kategoriRows = await Model_Kategori.getAll();
+        let Data = await Model_Users.getId(id_users);
 
-    let kategoriRows = await Model_Kategori.getAll();
-    let rows = await Model_Produk.getId(id);
-
-    res.render('produk/edit', {
-        data: kategoriRows, 
-        id: rows[0].id_produk,
-        nama_produk: rows[0].nama_produk,
-        harga_produk: rows[0].harga_produk,
-        foto_produk: rows[0].foto_produk,
-        id_kategori: rows[0].id_kategori,
-        nama_kategori: rows[0].nama_kategori
-        
+        if(Data[0].level_users == "1") {
+        res.render('produk/edit', {
+            data: rows[0],
+            id: rows[0].id_produk,
+            data: kategoriRows, 
+            nama_produk: rows[0].nama_produk,
+            harga_produk: rows[0].harga_produk,
+            foto_produk: rows[0].foto_produk,
+            id_kategori: rows[0].id_kategori,
+            nama_kategori: rows[0].nama_kategori,
+    
+            level: level_users
+        })
+        }
+        else if (Data[0].level_users == "2"){
+            req.flash('failure', 'Anda bukan admin');
+            res.redirect('/produk')
+        }
+    } catch {
+        req.flash('invalid', 'Anda harus login');
+        res.redirect('/login')
+    }
     })
-})
 
 router.post('/update/(:id)', upload.single("foto_produk"), async function(req, res, next){
     let id = req.params.id;
@@ -106,18 +139,36 @@ router.post('/update/(:id)', upload.single("foto_produk"), async function(req, r
     res.redirect('/produk')
     })
 
-    router.get('/delete/(:id)', async function(req, res, next) {
-        let id = req.params.id;
-        let rows = await Model_Produk.getId(id);
-        const namaFileLama = rows[0].foto_produk;
-        if(namaFileLama) {
-        const pathFilelama = path.join(__dirname, '../public/images/upload', namaFileLama);
-        fs.unlinkSync (pathFilelama);
+    router.get('/delete/(:id)', async function (req, res) {
+        try {
+            let id = req.params.id;
+            let id_users = req.session.userId;
+            let Data = await Model_Users.getId(id_users);
+            let rows = await Model_Produk.getId(id);
+    
+            if (Data.length > 0 && Data[0].level_users == 1) {
+                const namaFileLama = rows.length > 0 ? rows[0].foto_produk : null;
+                if (namaFileLama) {
+                    const pathFilelama = path.join(__dirname, '../public/images/upload', namaFileLama);
+                    fs.unlinkSync(pathFilelama);
+                }
+                await Model_Produk.Delete(id);
+                req.flash('success', 'Berhasil menghapus data');
+                res.redirect('/produk');
+            } else if (Data.length > 0 && Data[0].level_users == 2) {
+                req.flash('failure', 'Anda bukan admin');
+                res.redirect('/produk');
+            } else {
+                req.flash('invalid', 'Anda harus login');
+                res.redirect('/login');
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            req.flash('error', 'Terjadi kesalahan saat menghapus data');
+            res.redirect('/produk');
         }
-        await Model_Produk.Delete(id);
-        req.flash('success', ' Berhasil menghapus data');
-        res.redirect('/produk')
-        })
+    });
+    
 
 
 module.exports = router;

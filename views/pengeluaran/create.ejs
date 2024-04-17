@@ -1,0 +1,41 @@
+
+<%- include('../partials/__head.ejs') %>
+<body>
+    
+  <%- include('../partials/__navbar.ejs') %>
+    <div class="container">
+        <h1 class="text-center mb-5">Data Pengeluaran pangan</h1>
+        <form action="/pengeluaran/store" method="POST">
+            <div class="mb-3">
+                <label for="nama" class="form-label">Tanggal pengeluaran</label>
+                <input type="date" class="form-control" name="tanggal_pengeluaran" required>
+            </div>
+            <div class="mb-3">
+                <label for="nama" class="form-label">Jumlah pengeluaran</label>
+                <input type="text" class="form-control" name="jumlah_dikeluarkan" required>
+            </div>
+            <div class="mb-3">
+                <label for="nama" class="form-label">Nama Produk</label>
+                <select class="form-select" aria-label="Pilih harga produk" name="id_produk" required>
+                    <option selected>Pilih Produk</option>
+                    <% for(var i=0; i < data.length; i++){ %>
+                        <option value="<%= data[i].id_produk %>"><%= data[i].nama_produk %></option>
+                    <% } %>
+                </select>
+            <div class="mb-3">
+                <label for="nama" class="form-label">Kategori Produk</label>
+                <select class="form-select" aria-label="Pilih harga produk" name="id_kategori" required>
+                    <option selected>Pilih Kategori</option>
+                    <% for(var i=0; i < data_kategori.length; i++){ %>
+                        <option value="<%= data_kategori[i].id_kategori %>"><%= data_kategori[i].nama_kategori %></option>
+                    <% } %>
+                </select>
+            
+            <div class="mb-3">
+                <button type="submit" class="btn btn-sm btn-success">Simpan</button>
+            </div>
+        </form>
+    </div>
+</body>
+
+<%- include('../partials/__foot.ejs') %>

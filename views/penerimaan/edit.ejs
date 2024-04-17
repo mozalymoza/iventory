@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form edit Penerimaan pangan</title>
+    <!-- Bootstrap CSS link -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom CSS to center the card horizontally and align it slightly to the right vertically */
+        html,
+        body {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            max-width: 400px;
+            width: 100%;
+            margin-top: 0;
+            margin-bottom: auto;
+            margin-right: 20%;
+            margin-left: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header text-center">
+                Form edit 
+            </div>
+            <div class="card-body">
+                <form action="/penerimaan/update/<%= id %>" method="POST" >
+                    <div class="mb-3">
+                        <label for="nama" class="form-label">Tanggal Penerimaan Pangan</label>
+                        <input type="date" class="form-control" name="tanggal_penerimaan" value="<%= tanggal_penerimaan %>"required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="nama" class="form-label">Jumlah diterima bahan Pangan</label>
+                        <input type="text" class="form-control" name="jumlah_diterima" value="<%= jumlah_diterima %>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="nama" class="form-label">Nama Produk</label>
+                        <select name="id_produk" class="form-control">
+                            <% for(var i = 0; i< data_produk.length; i++) {%>
+                            <option value="<%= data_produk[i].id_produk %>"><%= data_produk[i].nama_produk %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="nama" class="form-label">Kategori</label>
+                        <select class="form-select" aria-label="Pilih Nama Kategori" name="id_kategori" required>
+                            <option value="<%= data_kategori.id_kategori %>"><%= data_kategori.nama_kategori %></option>
+                            <% for(var i=0; i < data_kategori.length; i++){ %>
+                                <option value="<%= data_kategori[i].id_kategori %>"><%= data_kategori[i].nama_kategori %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-sm btn-success">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS link (optional, if needed) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
+ 
